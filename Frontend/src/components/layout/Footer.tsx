@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import LanguageSelector from './LanguageSelector';
 import { 
   Heart, 
   // Phone, 
@@ -36,6 +38,7 @@ import {
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
+  const { t } = useTranslation();
    const [emailSubscription, setEmailSubscription] = useState({
     email: '',
     isLoading: false,
@@ -229,7 +232,7 @@ const Footer: React.FC = () => {
                   <h3 className="text-2xl font-bold bg-medical-gradient bg-clip-text text-transparent">
                     MedicalQ
                   </h3>
-                  <p className="text-sm text-gray-400">Smart Health Starts Here</p>
+                  <p className="text-sm text-gray-400">{t('header.tagline')}</p>
                 </div>
               </div>
 
@@ -262,19 +265,19 @@ const Footer: React.FC = () => {
               <div className="mb-6 p-4 bg-gray-800 rounded-lg">
                 <h4 className="font-semibold mb-2 flex items-center">
                   <Clock className="h-4 w-4 mr-2 text-medical-teal" />
-                  Operating Hours
+                  {t('footer.operatingHours')}
                 </h4>
                 <div className="text-sm text-gray-300 space-y-1">
                   <div className="flex justify-between">
-                    <span>OPD:</span>
+                    <span>{t('footer.opd')}:</span>
                     <span>8:00 AM - 8:00 PM</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Emergency:</span>
+                    <span>{t('footer.emergency')}:</span>
                     <span className="text-medical-teal font-semibold">24/7</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Lab Services:</span>
+                    <span>{t('footer.labServices')}:</span>
                     <span>6:00 AM - 10:00 PM</span>
                   </div>
                 </div>
@@ -282,7 +285,7 @@ const Footer: React.FC = () => {
 
               {/* Social Links */}
               <div>
-                <h4 className="font-semibold mb-3">Follow Us</h4>
+                <h4 className="font-semibold mb-3">{t('footer.followUs')}</h4>
                 <div className="flex items-center space-x-3">
                   {socialLinks.map((social, index) => (
                     <motion.a
@@ -352,24 +355,24 @@ const Footer: React.FC = () => {
             <div>
               <h4 className="text-xl font-semibold mb-2 flex items-center">
                 <TrendingUp className="h-5 w-5 mr-2 text-medical-teal" />
-                Stay Updated
+                {t('footer.stayUpdated')}
               </h4>
               <p className="text-gray-400">
-                Subscribe to our newsletter for health tips, medical updates, and hospital news.
+                {t('footer.newsletterDescription')}
               </p>
             </div>
             <div className="space-y-4">
                 <div className="flex items-center space-x-2 text-sm text-gray-400">
                   <CheckCircle className="h-4 w-4 text-medical-teal" />
-                  <span>Latest health research & tips</span>
+                  <span>{t('footer.healthTips')}</span>
                 </div>
                 <div className="flex items-center space-x-2 text-sm text-gray-400">
                   <CheckCircle className="h-4 w-4 text-medical-teal" />
-                  <span>Updates & announcements</span>
+                  <span>{t('footer.updates')}</span>
                 </div>
                 <div className="flex items-center space-x-2 text-sm text-gray-400">
                   <CheckCircle className="h-4 w-4 text-medical-teal" />
-                  <span>Expert medical insights</span>
+                  <span>{t('footer.expertInsights')}</span>
                 </div>
               </div>
             </div>
@@ -377,7 +380,7 @@ const Footer: React.FC = () => {
             <div className="lg:col-span-1 space-y-4 py-4">
               <form onSubmit={handleEmailSubscription}>
                 <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 space-y-2 sm:space-y-0">
-  <input
+ <input
   type="email"
   value={emailSubscription.email}
   onChange={(e) =>
@@ -386,7 +389,6 @@ const Footer: React.FC = () => {
       email: e.target.value,
     }))
   }
-  placeholder="Enter your email"
   disabled={emailSubscription.isLoading}
   style={{
     width: "700px", 
@@ -396,7 +398,9 @@ const Footer: React.FC = () => {
     flexShrink: 0,
   }}
   className="px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-medical-teal focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+  placeholder={t('footer.enterEmail')}
 />
+
   <motion.button
     type="submit"
     disabled={emailSubscription.isLoading}
@@ -407,10 +411,10 @@ const Footer: React.FC = () => {
     {emailSubscription.isLoading ? (
       <>
         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-        Subscribing...
+        {t('footer.subscribing')}
       </>
     ) : (
-      'Subscribe'
+      t('footer.subscribe')
     )}
   </motion.button>
 </div>
@@ -440,17 +444,10 @@ const Footer: React.FC = () => {
             <div>
               <h4 className="text-sm font-semibold mb-2 flex items-center">
                 <Languages className="h-4 w-4 mr-2 text-medical-teal" />
-                Languages Available
+                {t('footer.languagesAvailable')}
               </h4>
-              <div className="flex flex-wrap gap-2">
-                {languages.map((lang) => (
-                  <span
-                    key={lang}
-                    className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full hover:bg-gray-700 cursor-pointer transition-colors"
-                  >
-                    {lang}
-                  </span>
-                ))}
+              <div className="flex justify-start">
+                <LanguageSelector />
               </div>
             </div>
           </div>
@@ -463,7 +460,7 @@ const Footer: React.FC = () => {
           transition={{ delay: 0.8, duration: 0.6 }}
           className="mt-8 pt-6 border-t border-gray-800"
         >
-          <h4 className="text-lg font-semibold mb-4 text-center">Accreditations & Certifications</h4>
+          <h4 className="text-lg font-semibold mb-4 text-center">{t('footer.accreditations')}</h4>
           <div className="flex flex-wrap justify-center gap-6">
             {certifications.map((cert, index) => (
               <motion.div
@@ -524,7 +521,7 @@ const Footer: React.FC = () => {
             <div className="bg-red-900/20 border border-red-800/30 rounded-lg p-3">
               <p className="text-red-400 text-sm font-medium flex items-center justify-center">
                 <Ambulance className="h-4 w-4 mr-2" />
-                For Medical Emergencies, Call: +91-11-6969-6969 (Available 24/7)
+                {t('footer.emergencyNotice')}
               </p>
             </div>
           </div>

@@ -14,6 +14,8 @@ const Newsletter = require('./Models/Newsletter');
 
 // Email configuration (add to your environment variables)
 const authRoutes = require('./Routes/authRoutes');
+const appointmentRoutes = require('./Routes/appointmentRoutes');
+const searchRoutes = require('./Routes/searchRoutes');
 const { errorHandler, notFound } = require('./Middlewares/Error');
 
 // Mongoose models
@@ -90,6 +92,10 @@ app.use('/api/auth', rateLimit({
     skipSuccessfulRequests: true,
     message: { success: false, message: 'Too many auth attempts, try again later.' },
 }), authRoutes);
+
+// API Routes
+app.use('/api/appointments', appointmentRoutes);
+app.use('/api/search', searchRoutes);
 
 // Doctor registration
 app.post('/form/doctors', async (req, res) => {

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Heart, 
-  Search, 
   Bell, 
   Menu, 
   X, 
@@ -18,7 +17,9 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import SearchBar from '../search/SearchBar';
 
 interface HeaderProps {
   onAuthModal: (type: 'login' | 'register') => void;
@@ -27,15 +28,15 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onAuthModal }) => {
   const { user, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
 
   const profileMenuItems = [
-    { icon: User, label: 'Profile', href: '/profile' },
-    { icon: Settings, label: 'Settings', href: '/settings' },
-    { icon: HelpCircle, label: 'Help', href: '/help' },
-    { icon: Shield, label: 'Privacy', href: '/privacy' },
+    { icon: User, label: t('header.profile'), href: '/profile' },
+    { icon: Settings, label: t('header.settings'), href: '/settings' },
+    { icon: HelpCircle, label: t('header.help'), href: '/help' },
+    { icon: Shield, label: t('header.privacy'), href: '/privacy' },
   ];
 
   const handleEmergencyCall = () => {
@@ -64,44 +65,14 @@ const Header: React.FC<HeaderProps> = ({ onAuthModal }) => {
                 MedicalQ
               </span>
               <div className="text-xs text-gray-500 dark:text-gray-400 -mt-1">
-                Smart Health Starts Here
+                {t('header.tagline')}
               </div>
             </div>
           </Link>
 
           {/* Search Bar */}
           <div className="hidden md:flex flex-1 max-w-md mx-8">
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search doctors, departments, services..."
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-full text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-medical-teal focus:border-transparent transition-all duration-200"
-              />
-              {searchQuery && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-dark-surface rounded-xl border border-gray-200 dark:border-dark-border shadow-xl overflow-hidden"
-                >
-                  <div className="p-4">
-                    <div className="text-sm text-gray-400 mb-2">Quick results</div>
-                    <div className="space-y-2">
-                      <div className="flex items-center space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-dark-card rounded-lg cursor-pointer">
-                        <HelpCircle className="h-4 w-4 text-medical-teal" />
-                        <span className="text-gray-900 dark:text-white">Cardiology Department</span>
-                      </div>
-                      <div className="flex items-center space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-dark-card rounded-lg cursor-pointer">
-                        <User className="h-4 w-4 text-medical-blue" />
-                        <span className="text-gray-900 dark:text-white">Dr. Rajesh Kumar - Cardiologist</span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </div>
+            <SearchBar placeholder={t('header.searchPlaceholder')} />
           </div>
 
           {/* Emergency & Communities Section */}
@@ -114,18 +85,18 @@ const Header: React.FC<HeaderProps> = ({ onAuthModal }) => {
               className="flex items-center space-x-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               <Phone className="h-4 w-4" />
-              <span className="text-sm">Emergency</span>
+              <span className="text-sm">{t('header.emergency')}</span>
             </motion.button>
 
             {/* Explore Communities */}
-            <Link to="/communities">
+            <Link to="/community">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="flex items-center space-x-2 px-4 py-2 bg-medical-teal hover:bg-medical-teal/90 text-white rounded-full font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
               >
                 <Users className="h-4 w-4" />
-                <span className="text-sm">Communities</span>
+                <span className="text-sm">{t('header.communities')}</span>
               </motion.button>
             </Link>
           </div>
@@ -176,7 +147,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthModal }) => {
                         {user.role === 'doctor' && (
                           <Shield className="h-3 w-3 mr-1 text-medical-blue" />
                         )}
-                        {user.role}
+                        {t(`header.${user.role}`)}
                       </div>
                     </div>
                   </motion.button>
@@ -213,7 +184,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthModal }) => {
                             className="flex items-center space-x-3 px-4 py-2 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-gray-50 dark:hover:bg-dark-card transition-colors w-full text-left"
                           >
                             <LogOut className="h-4 w-4" />
-                            <span>Sign out</span>
+                            <span>{t('header.signOut')}</span>
                           </button>
                         </div>
                       </motion.div>
@@ -229,7 +200,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthModal }) => {
                   onClick={() => onAuthModal('login')}
                   className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-medical-teal transition-colors"
                 >
-                  Sign In
+                  {t('header.signIn')}
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -237,7 +208,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthModal }) => {
                   onClick={() => onAuthModal('register')}
                   className="px-4 py-2 bg-medical-gradient text-white rounded-full font-medium hover:shadow-lg hover:shadow-medical-teal/25 transition-all duration-200"
                 >
-                  Get Started
+                  {t('header.getStarted')}
                 </motion.button>
               </div>
             )}
@@ -265,14 +236,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthModal }) => {
             className="md:hidden bg-white dark:bg-dark-surface border-b border-gray-200 dark:border-dark-border"
           >
             <div className="px-4 py-4 space-y-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-dark-card border border-gray-200 dark:border-dark-border rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-medical-teal"
-                />
-              </div>
+              <SearchBar placeholder={t('header.searchPlaceholder')} />
               
               {/* Mobile Emergency & Communities */}
               <div className="flex space-x-3">
@@ -282,15 +246,15 @@ const Header: React.FC<HeaderProps> = ({ onAuthModal }) => {
                   className="flex-1 flex items-center justify-center space-x-2 py-2 bg-red-500 text-white rounded-lg font-medium"
                 >
                   <Phone className="h-4 w-4" />
-                  <span>Emergency</span>
+                  <span>{t('header.emergency')}</span>
                 </motion.button>
-                <Link to="/communities" className="flex-1">
+                <Link to="/community" className="flex-1">
                   <motion.button
                     whileTap={{ scale: 0.95 }}
                     className="w-full flex items-center justify-center space-x-2 py-2 bg-medical-teal text-white rounded-lg font-medium"
                   >
                     <Users className="h-4 w-4" />
-                    <span>Communities</span>
+                    <span>{t('header.communities')}</span>
                   </motion.button>
                 </Link>
               </div>
@@ -301,13 +265,13 @@ const Header: React.FC<HeaderProps> = ({ onAuthModal }) => {
                     onClick={() => onAuthModal('login')}
                     className="flex-1 py-2 text-center text-gray-700 dark:text-gray-300 hover:text-medical-teal transition-colors"
                   >
-                    Sign In
+                    {t('header.signIn')}
                   </button>
                   <button
                     onClick={() => onAuthModal('register')}
                     className="flex-1 py-2 bg-medical-gradient text-white rounded-lg font-medium"
                   >
-                    Get Started
+                    {t('header.getStarted')}
                   </button>
                 </div>
               )}

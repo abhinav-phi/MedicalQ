@@ -3,12 +3,13 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import './i18n';
 import Header from './components/layout/Header';
 import Hero from './components/home/Hero';
 import Features from './components/home/Features';
 import Stats from './components/home/Stats';
 import SpecialistDoctors from './components/doctors/SpecialistDoctors';
-import CommunityPlatform from './components/community/CommunityPlatform';
+import CommunityPage from './components/community/CommunityPage';
 import CommunityAds from './components/community/CommunityAds';
 import Footer from './components/layout/Footer';
 import AuthModal from './components/auth/AuthModal';
@@ -58,9 +59,6 @@ const HomePage: React.FC = () => {
         
         {/* Add spacing */}
         <div className="py-12" />
-        
-        {/* Community Platform */}
-        <CommunityPlatform />
         
         {/* Community Ads Sidebar - Fixed position for desktop */}
         <div className="fixed right-4 top-1/2 transform -translate-y-1/2 w-80 z-40 hidden xl:block">
@@ -125,6 +123,10 @@ const AppContent: React.FC = () => {
                 <HomePage />
               )
             } 
+          />
+          <Route 
+            path="/community" 
+            element={<CommunityPage />} 
           />
           <Route 
             path="/dashboard" 

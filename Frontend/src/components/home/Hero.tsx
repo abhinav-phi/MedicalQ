@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import CommunityAds from '../community/CommunityAds.tsx';
+import { useState } from 'react';
+import BookingModal from '../appointments/BookingModal';
+import VirtualTourModal from '../tour/VirtualTourModal';
+import { useTranslation } from 'react-i18next';
 
 import { 
   Heart, 
@@ -21,6 +24,10 @@ interface HeroProps {
 }
 
 const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [isTourModalOpen, setIsTourModalOpen] = useState(false);
+  const { t } = useTranslation();
+
   const floatingIcons = [
     { icon: Heart, delay: 0, x: 100, y: 50 },
     { icon: Stethoscope, delay: 0.5, x: -80, y: 80 },
@@ -156,13 +163,13 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
             transition={{ delay: 0.3, duration: 0.8 }}
             className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
           >
-            <span className="text-gray-900 dark:text-white">Smart  </span>
+            <span className="text-gray-900 dark:text-white">{t('hero.smart')} </span>
             <span className="bg-medical-gradient bg-clip-text text-transparent">
-              Health
+              {t('hero.health')}
             </span>
             <br />
-            <span className="text-gray-900 dark:text-white">Starts </span>
-            <span className="text-medical-blue"> Here</span>
+            <span className="text-gray-900 dark:text-white">{t('hero.starts')} </span>
+            <span className="text-medical-blue">{t('hero.here')}</span>
           </motion.h1>
 
           <motion.p
@@ -171,7 +178,7 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed"
           >
-            A Modern Hub for Reliable Medical Knowledge, Powered by Doctors & AI
+            {t('hero.subtitle')}
           </motion.p>
 
           <motion.div
@@ -183,20 +190,21 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
             <motion.button
               whileHover={{ scale: 1.05, boxShadow: "0 10px 40px rgba(20, 184, 166, 0.4)" }}
               whileTap={{ scale: 0.95 }}
-              onClick={onGetStarted}
+              onClick={() => setIsBookingModalOpen(true)}
               className="px-8 py-4 bg-medical-gradient text-white rounded-full font-semibold text-lg flex items-center space-x-2 shadow-lg hover:shadow-medical-teal/30 transition-all duration-300"
             >
-              <span>Book Appointment</span>
+              <span>{t('hero.bookAppointment')}</span>
               <ArrowRight className="h-5 w-5" />
             </motion.button>
 
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => setIsTourModalOpen(true)}
               className="px-8 py-4 bg-white dark:bg-dark-surface border-2 border-gray-200 dark:border-dark-border text-gray-900 dark:text-white rounded-full font-semibold text-lg flex items-center space-x-2 backdrop-blur-sm hover:bg-gray-50 dark:hover:bg-dark-card transition-all duration-300"
             >
               <Play className="h-5 w-5" />
-              <span>Virtual Tour</span>
+              <span>{t('hero.virtualTour')}</span>
             </motion.button>
           </motion.div>
         </motion.div>
@@ -259,6 +267,17 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
           </motion.button>
         </motion.div>
       </div>
+
+      {/* Modals */}
+      <BookingModal
+        isOpen={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
+      />
+      
+      <VirtualTourModal
+        isOpen={isTourModalOpen}
+        onClose={() => setIsTourModalOpen(false)}
+      />
     </section>
   );
 };
